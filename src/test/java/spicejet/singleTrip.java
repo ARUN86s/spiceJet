@@ -46,9 +46,5 @@ public class singleTrip extends BaseFile{
 	Spicejet sj = new Spicejet(driver);
 	sj.netBankingOption();
 	}
+	}
 	
-	
-
-	
-	
-}
