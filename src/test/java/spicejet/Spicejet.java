@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
@@ -87,10 +86,12 @@ WebElement singleTrip;
 WebElement From;
 @FindBy(xpath="//div[@class='css-76zvg2 r-cqee49 r-ubezar r-1kfrs79 r-1ozqkpa']")
 WebElement India;
-@FindBy(xpath="/html[1]/body[1]/div[2]/div[1]/div[1]/div[1]/div[3]/div[2]/div[3]/div[1]/div[1]/div[2]/div[2]/div[2]/div[2]/div[2]/div[15]/div[2]/div[1]")
+@FindBy(xpath="//div[normalize-space()='Chennai International Airport']")
 WebElement chennai;
 @FindBy(xpath="//div[normalize-space()='Rajiv Gandhi International Airport']")
 WebElement Hydrebad;
+@FindBy(xpath="//div[normalize-space()='Indira Gandhi International Airport']")
+WebElement Delhi;
 @FindBy(xpath="//div[@class='css-1dbjc4n r-1awozwy r-1xfd6ze r-1loqt21 r-18u37iz r-1777fci r-1w50u8q r-ah5dr5 r-1otgn73']")
 WebElement continueBooking;
 
@@ -103,10 +104,10 @@ WebElement IndiaInTO;
 @FindBy(xpath="//div[normalize-space()='Departure Date']")
 WebElement DepDate;
 
-@FindBy(xpath="/html[1]/body[1]/div[2]/div[1]/div[1]/div[1]/div[3]/div[2]/div[4]/div[1]/div[2]/div[2]/div[3]/div[2]/div[1]/div[2]/div[1]/div[3]/div[1]/div[1]/div[1]/div[1]")
-WebElement Jan1;
-@FindBy(xpath="/html[1]/body[1]/div[2]/div[1]/div[1]/div[1]/div[3]/div[2]/div[4]/div[1]/div[2]/div[2]/div[3]/div[2]/div[1]/div[2]/div[1]/div[3]/div[2]/div[7]/div[1]/div[1]")
-WebElement Jan14;
+@FindBy(xpath="/html[1]/body[1]/div[2]/div[1]/div[1]/div[1]/div[3]/div[2]/div[4]/div[1]/div[2]/div[2]/div[3]/div[2]/div[1]/div[2]/div[1]/div[3]/div[4]/div[7]/div[1]/div[1]")
+WebElement Feb25;
+@FindBy(xpath="/html[1]/body[1]/div[2]/div[1]/div[1]/div[1]/div[3]/div[2]/div[4]/div[1]/div[2]/div[2]/div[3]/div[2]/div[1]/div[2]/div[1]/div[3]/div[5]/div[4]/div[1]/div[1]")
+WebElement Feb29;
 @FindBy(xpath="/html[1]/body[1]/div[2]/div[1]/div[1]/div[1]/div[3]/div[2]/div[7]/div[2]/div[1]")
 WebElement search;
 @FindBy(xpath="/html[1]/body[1]/div[2]/div[1]/div[1]/div[1]/div[6]/div[2]/div[2]/div[3]")
@@ -174,7 +175,7 @@ WebElement axisBank;
 @FindBy(xpath="//div[@class='css-1dbjc4n r-1awozwy r-un1frt r-z2wwpe r-1loqt21 r-18u37iz r-1777fci r-6ity3w r-d9fdf6 r-9qu9m4 r-ah5dr5 r-1otgn73 r-1wgg2b2 r-1wn9b5e']")
 WebElement proceedingPay;
 
-private File screenshotFile;
+
 
 
 	
@@ -198,10 +199,27 @@ public void waitForElementPresence(By locator, int timeoutInSeconds) {
     WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds));
     wait.until(ExpectedConditions.presenceOfElementLocated(locator));
 }
-	
 
+public void takeScreenshot(WebDriver driver, String fileName) {
+    // Convert the WebDriver instance to TakesScreenshot
+    TakesScreenshot ts = ((TakesScreenshot) driver);
+
+    // Capture the screenshot as a file
+    File screenshot = ts.getScreenshotAs(OutputType.FILE);
+
+    try {
+        // Copy the file to a desired location
+        org.apache.commons.io.FileUtils.copyFile(screenshot, new File(fileName));
+        System.out.println("Screenshot captured and saved as " + fileName);
+    } catch (IOException e) {
+        System.out.println("Failed to capture screenshot: " + e.getMessage());
+    }
+}
+
+		
 public void signUp() {
 	signUplink.click();
+	takeScreenshot(driver,"C:\\Users\\SHASWATH\\Documents\\arun\\GUVI\\spicejet\\screenshot\\signingpage.jpg");
 }	
 
 public void memberEnrollmentWindow() {	
@@ -260,21 +278,11 @@ public void otpHandlying() {
         waitForElementToBeClickable(otpVerify,20);
         otpVerify.click();
                
-    } finally {
+    } finally {	
         // You can add cleanup or error handling code here if needed
     }
-	 // Take the screenshot
-    File screenshotFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-
-    // Define the destination file path for the screenshot
-    File destinationFile = new File("C:\\Users\\SHASWATH\\Documents\\Eclipse\\project\\screenshot\\signup.png");
-
-    try {
-        // Copy the screenshot file to the destination file
-        FileUtils.copyFile(screenshotFile, destinationFile);
-    } catch (IOException e) {
-        e.printStackTrace();
-    }}
+	takeScreenshot(driver,"C:\\Users\\SHASWATH\\Documents\\arun\\GUVI\\spicejet\\screenshot\\signingpageotp.jpg");
+    }
 
 public void	homepage() {
 	 String actualTitle = (driver.getTitle());
@@ -315,25 +323,16 @@ public void singleTrip() {
 	singleTrip.click();	
 	From.click();
 	India.click();
+	waitForElementToBeClickable(chennai,10);
 	chennai.click();
-	waitForElementToBeClickable(Hydrebad,10);
-    Hydrebad.click();
-    waitForElementToBeClickable(Jan14,15);
-    Jan14.click();
+	waitForElementToBeClickable(Delhi,10);
+	Delhi.click();
+    waitForElementToBeClickable(Feb25,15);
+    Feb25.click();
     search.click();
  // Take the screenshot
-    File screenshotFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-
-    // Define the destination file path for the screenshot
-    File destinationFile = new File("C:\\Users\\SHASWATH\\Documents\\Eclipse\\project\\screenshot\\singletrip.png");
-
-    try {
-        // Copy the screenshot file to the destination file
-        FileUtils.copyFile(screenshotFile, destinationFile);
-    } catch (IOException e) {
-        e.printStackTrace();
-}}
-
+    takeScreenshot(driver,"C:\\Users\\SHASWATH\\Documents\\arun\\GUVI\\spicejet\\screenshot\\singletrip.jpg");
+}
 
 public void roundTrip()  {
 	try {
@@ -344,29 +343,20 @@ public void roundTrip()  {
 	Roundtrip.click();
     From.click();
 	India.click();
+    waitForElementToBeClickable(chennai,10);
     chennai.click();
-    waitForElementToBeClickable(Hydrebad,10);
-    Hydrebad.click();
+    waitForElementToBeClickable(Delhi,10);
+    Delhi.click();
      
   
-    waitForElementToBeClickable(Jan1,15);
-    Jan1.click();
-    waitForElementToBeClickable(Jan14,15);
-    Jan14.click();
+    waitForElementToBeClickable(Feb25,15);
+    Feb25.click();
+    waitForElementToBeClickable(Feb29,15);
+    Feb29.click();
     search.click();
  // Take the screenshot
-    File screenshotFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-
-    // Define the destination file path for the screenshot
-    File destinationFile = new File("C:\\Users\\SHASWATH\\Documents\\Eclipse\\project\\screenshot\\multitrip.png");
-
-    try {
-        // Copy the screenshot file to the destination file
-        FileUtils.copyFile(screenshotFile, destinationFile);
-    } catch (IOException e) {
-        e.printStackTrace();
-}}
-
+    takeScreenshot(driver,"C:\\Users\\SHASWATH\\Documents\\arun\\GUVI\\spicejet\\screenshot\\multitrip.jpg");
+}
 
 public void continueToSelectFlight() {
 	JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -494,17 +484,8 @@ public void upi() {
     waitForElementToBeClickable(proceedToPay,15);
     proceedToPay.click();
  // Take the screenshot
-    File screenshotFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-
-    // Define the destination file path for the screenshot
-    File destinationFile = new File("C:\\Users\\SHASWATH\\Documents\\Eclipse\\project\\screenshot\\upi.png");
-
-    try {
-        // Copy the screenshot file to the destination file
-        FileUtils.copyFile(screenshotFile, destinationFile);
-    } catch (IOException e) {
-        e.printStackTrace();
-}}
+    takeScreenshot(driver,"C:\\Users\\SHASWATH\\Documents\\arun\\GUVI\\spicejet\\screenshot\\upi.jpg");
+}
 
 public void netBankingOption() {
 	try {	
@@ -520,17 +501,8 @@ public void netBankingOption() {
     js.executeScript("window.scrollBy(0, 200);");
     proceedToPay.click();
  // Take the screenshot
-    File screenshotFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-
-    // Define the destination file path for the screenshot
-    File destinationFile = new File("C:\\Users\\SHASWATH\\Documents\\Eclipse\\project\\screenshot\\netBanking.png");
-
-    try {
-        // Copy the screenshot file to the destination file
-        FileUtils.copyFile(screenshotFile, destinationFile);
-    } catch (IOException e) {
-        e.printStackTrace();
-}}
+    takeScreenshot(driver,"C:\\Users\\SHASWATH\\Documents\\arun\\GUVI\\spicejet\\screenshot\\netBanking.jpg");
+}
 
 
 

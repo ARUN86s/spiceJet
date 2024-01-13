@@ -47,11 +47,6 @@ public class testCases extends BaseFile{
 	sj.upi();
 	}	
 	
-	@Test
-	public void testCase08() {
-	Spicejet sj = new Spicejet(driver);
-	sj.cardDetails();
-	}	
 	
 	
 	}
